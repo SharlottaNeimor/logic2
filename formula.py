@@ -9,15 +9,7 @@ EQUIVALANCE = '@'
 class Formula:
     def __init__(self,string):
         self.string = string
-    def adoptate(self):
-        sF = self.sub_formulas()
-        if sF == False:
-            return self
-        if sF[1] == IMPLICATION: return sF[0][0].adoptate().implic(sF[0][1].adoptate())
-        elif sF[1] == NEGATION: return sF[0][0].adoptate().neg()
-        elif sF[1] == CONJUNCTION: return sF[0][0].adoptate().implic(sF[0][1].adoptate().neg()).neg()
-        elif sF[1] == DISJUNCTION: return sF[0][0].adoptate().neg().implic(sF[0][0].adoptate())
-        elif sF[1] == EQUIVALANCE: return sF[0][0].implic(sF[0][1]).con(sF[0][1].implic(sF[0][0])).adoptate()
+    def is_atom(self): return self.sub_formulas() == False
     def __call__(self,x=None):
         if x == None: return self.string
         i = 0
@@ -60,6 +52,15 @@ class Formula:
         L = list(set(map(lambda x: 'x'+x,re.findall(r'\d+',self()))))
         L.sort(key = lambda x: int(x[1:]))
         return L
+    def adoptate(self):
+        sF = self.sub_formulas()
+        if sF == False:
+            return self
+        if sF[1] == IMPLICATION: return sF[0][0].adoptate().implic(sF[0][1].adoptate())
+        elif sF[1] == NEGATION: return sF[0][0].adoptate().neg()
+        elif sF[1] == CONJUNCTION: return sF[0][0].adoptate().implic(sF[0][1].adoptate().neg()).neg()
+        elif sF[1] == DISJUNCTION: return sF[0][0].adoptate().neg().implic(sF[0][0].adoptate())
+        elif sF[1] == EQUIVALANCE: return sF[0][0].implic(sF[0][1]).con(sF[0][1].implic(sF[0][0])).adoptate()
     def semantic(self):
         semantic_string = []
         semantic = []
